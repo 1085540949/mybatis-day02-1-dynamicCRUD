@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 用于唯一标识当前的映射文件 -->
+<mapper namespace="pojo.UserMapper">
+	
+	<!-- 单值传递问题 -->
+	<select id="findOne" resultType="pojo.User">
+		select * from user where id=#{baoxun}
+	</select>
+	
+		<!-- 单值传递问题 -->
+	<select id="findOne1" resultType="java.util.Map">
+		select * from user where id=#{id}
+	</select>
+	
+	
+	<!-- 多值传递问题  区间查询 -->
+	<select id="findUserByAges" resultType="java.util.Map">
+		select * from user where age > #{baoxunminAge} and 
+		<!-- xml文件会根据   转义字符 进行  转义<>标签的形式   -->
+		<![CDATA[age < #{baoxunmaxAge}]]>
+	</select>
+	
+	<!-- 动态的插入语句 -->
+	<insert id="dynamicAddUser">
+		insert into user 
+			<trim prefix="(" suffix=")" suffixOverrides="," >
+				
+				<if test="id != null">id,</if>
+				<if test="name != null">name,</if>
+				<if test="age != 0">age,</if>
+				<if test="sex != null">sex</if>
+			</trim>
+		values 
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null">#{id},</if>
+				<if test="name != null">#{name},</if>
+				<if test="age != 0">#{age},</if>
+				<if test="sex != null">#{sex}</if>
+			</trim>
+	</insert>
+	
+	<!-- 动态修改 -->
+	<update id="dynamicUpdateUser">
+		update user 
+			<set>
+				<if test="name != null"> name=#{name},</if>
+				<if test="age != 0"> age=#{age},</if>
+				<if test="sex != null"> sex=#{sex} </if>
+			</set>
+		where id=#{id}
+	</update>
+	<!-- foreach标签  ： 遍历  所有的id 并获取id的值
+				collection="" : 可以支持三种数据结构：array list map 
+				               特殊用法：array数组  collection="array"
+				                list集合    collection="list" 
+				                map映射       collection="？？？"
+				open="("  : 前缀 ( 
+				close=")" : 后缀 )
+				item="tempId" : 临时变量 接收 数组中的每一个id的值
+				index="i" : 循环变量  可以不写
+				separator="," 使用, 隔开 数组中的每一个值
+			 -->
+	<delete id="dynamicDeleteUserByArray">
+		delete from user where id in 
+		<!-- 	<foreach collection="array" open="(" close=")" item="tempId" index="i" separator=","  >
+				#{i}
+			</foreach> -->
+			
+			<foreach collection="array" open="(" close=")" item="tempId" index="i" separator=","  >
+				#{tempId}
+			</foreach>
+	</delete>
+	
+		<select id="selectdynamicDeleteUserByArray"   resultType="pojo.User">
+		select *from user where id in 
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+	
+	
+	<delete id="dynamicDeleteUserByList" >
+		delete from user where id in 
+			<foreach collection="list" open="(" close=")" item="tempId"  separator=","  >
+				#{tempId}
+			</foreach>
+	</delete>
+	
+	<delete id="dynamicDeleteUserByMap">
+		delete from user where id in 
+			<!-- 使用map集合，循环遍历list集合
+				collection="ids" ： ids 为 map中的key
+			 -->
+			<foreach collection="ids" open="(" close=")" item="tempId"  separator=","  >
+				#{tempId}
+			</foreach>
+		or sex=#{sex}
+	</delete>
+	
+</mapper>
