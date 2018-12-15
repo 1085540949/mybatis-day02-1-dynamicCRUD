@@ -82,11 +82,13 @@ public class TestMybatis {
 	@Test
 	public void test03() {
 		//zhushi
-		User user = new User();
-		user.setAge(29);
-		user.setName("±®—∂");
-		user.setSex("men");
-		user.setId(50010);
+		User user=new User();
+		user.setName("÷Ì∞ÀΩ‰");
+		user.setAge(100);
+		user.setSex("man");
+		user.setId(60000);
+		
+		
 		sqlSession.insert("pojo.UserMapper.dynamicAddUser", user);
 		sqlSession.commit();
 	}
