@@ -81,6 +81,7 @@ public class TestMybatis {
 	//动态的插入
 	@Test
 	public void test03() {
+		//zhushi
 		User user = new User();
 		user.setAge(29);
 		user.setName("报讯");
@@ -106,6 +107,7 @@ public class TestMybatis {
 	@Test
 	public void test05() {
 		int[] ids = new int[2];
+		
 		ids[0] = 50000;
 		ids[1] = 50001;
 		//ids[2] = 50002;
