@@ -30,7 +30,7 @@ public class TestMybatis {
 	@Before
 	public void before() throws IOException {
 		
-		
+		//增加注释
 		System.out.println("打开数据库");
 		//通过流获取核心配置文件 sqlMapConfig.xml
 		is = Resources.getResourceAsStream("sqlMapConfig.xml");
